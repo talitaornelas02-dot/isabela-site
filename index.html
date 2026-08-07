@@ -146,6 +146,7 @@
   .accordion[open] summary .chevron{transform:rotate(90deg);}
   .accordion .acc-body{padding:0 24px 22px;}
   .link-list{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:9px;}
+  .link-list li{display:flex; flex-direction:column; gap:6px;}
   .link-list li a{
     display:block; background:#fff; border:1px solid var(--line); border-radius:12px; padding:10px 14px;
     font-size:13px; color:#4a3a55; text-decoration:none; transition:.2s; line-height:1.4;
@@ -154,6 +155,38 @@
   .link-list li.plain span{
     display:block; background:transparent; border:1px dashed var(--line); border-radius:12px; padding:10px 14px;
     font-size:13px; color:#9b8aa8; font-style:italic;
+  }
+  .link-list li.bought a{text-decoration:line-through; opacity:.5;}
+
+  /* GIFT "MARK AS BOUGHT" */
+  .gift-mark{display:flex; flex-direction:column; gap:6px;}
+  .mark-btn{
+    align-self:flex-start; background:transparent; border:1px solid var(--orchid); color:var(--orchid-deep);
+    border-radius:999px; padding:6px 12px; font-size:11px; font-weight:700; cursor:pointer;
+    font-family:'Quicksand',sans-serif; transition:.2s;
+  }
+  .mark-btn:hover{background:var(--orchid); color:#fff;}
+  .mark-form{
+    display:flex; flex-direction:column; gap:6px; background:#fff; border:1px solid var(--line);
+    border-radius:10px; padding:8px;
+  }
+  .mark-form input{
+    font-family:'Quicksand',sans-serif; border:1px solid var(--line); border-radius:8px;
+    padding:6px 10px; font-size:12px; background:#fff; color:var(--aubergine);
+  }
+  .mark-actions{display:flex; gap:6px; flex-wrap:wrap; align-items:center;}
+  .mark-actions button{
+    font-family:'Quicksand',sans-serif; font-size:11px; font-weight:700; border-radius:999px;
+    padding:5px 12px; cursor:pointer; border:none;
+  }
+  .mark-confirm{background:var(--orchid-deep); color:#fff;}
+  .mark-confirm:disabled{opacity:.6; cursor:default;}
+  .mark-cancel{background:var(--lavender-mist); color:var(--violet-blue);}
+  .mark-error{font-size:11px; color:#b23b5a;}
+  .bought-note{font-size:11px; color:#5c8a4a; font-weight:700; display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+  .undo-btn{
+    background:none; border:none; color:var(--violet-blue); text-decoration:underline;
+    font-size:11px; cursor:pointer; padding:0; font-family:'Quicksand',sans-serif; font-weight:600;
   }
 
   /* DONATIONS */
@@ -647,6 +680,135 @@ msgSubmit.addEventListener('click', ()=>{
 });
 
 renderMessages();
+</script>
+
+<script type="module">
+// ---------- Gift list: "mark as bought" (shared via Firestore) ----------
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore, doc, setDoc, collection, onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAi9sA369k4VtUSRdupVLws4-9qLFy8wc0",
+  authDomain: "isabela-enxoval.firebaseapp.com",
+  projectId: "isabela-enxoval",
+  storageBucket: "isabela-enxoval.firebasestorage.app",
+  messagingSenderId: "801065887048",
+  appId: "1:801065887048:web:443d5ebf07ce392f44ff7d"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+function escapeHtmlGift(str){
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+function hashId(str){
+  let h = 0;
+  for(let i=0;i<str.length;i++){ h = (h*31 + str.charCodeAt(i))|0; }
+  return 'g' + Math.abs(h).toString(36);
+}
+
+const idToLi = new Map();
+
+document.querySelectorAll('.link-list li').forEach(li => {
+  const a = li.querySelector('a[href]');
+  if(!a) return;
+  const id = hashId(a.getAttribute('href'));
+  li.dataset.giftId = id;
+  idToLi.set(id, li);
+
+  const wrap = document.createElement('div');
+  wrap.className = 'gift-mark';
+  wrap.innerHTML = `
+    <button type="button" class="mark-btn">🎁 Marcar como comprado</button>
+    <div class="mark-form" hidden>
+      <input type="text" class="mark-name" placeholder="Seu nome (opcional)" maxlength="40">
+      <div class="mark-actions">
+        <button type="button" class="mark-confirm">Confirmar</button>
+        <button type="button" class="mark-cancel">Cancelar</button>
+      </div>
+      <div class="mark-error"></div>
+    </div>
+    <div class="bought-note" hidden></div>
+  `;
+  li.appendChild(wrap);
+
+  const btn = wrap.querySelector('.mark-btn');
+  const form = wrap.querySelector('.mark-form');
+  const nameInput = wrap.querySelector('.mark-name');
+  const confirmBtn = wrap.querySelector('.mark-confirm');
+  const cancelBtn = wrap.querySelector('.mark-cancel');
+  const errorEl = wrap.querySelector('.mark-error');
+
+  btn.addEventListener('click', ()=>{
+    btn.hidden = true;
+    form.hidden = false;
+    nameInput.focus();
+  });
+  cancelBtn.addEventListener('click', ()=>{
+    form.hidden = true;
+    btn.hidden = false;
+    errorEl.textContent = '';
+  });
+  confirmBtn.addEventListener('click', async ()=>{
+    confirmBtn.disabled = true;
+    errorEl.textContent = '';
+    try{
+      await setDoc(doc(db, 'gifts', id), {
+        bought: true,
+        boughtBy: nameInput.value.trim().slice(0,40)
+      });
+    }catch(e){
+      errorEl.textContent = 'Não foi possível marcar agora, tente novamente.';
+    }
+    confirmBtn.disabled = false;
+  });
+});
+
+function renderBoughtState(id, bought, boughtBy){
+  const li = idToLi.get(id);
+  if(!li) return;
+  const wrap = li.querySelector('.gift-mark');
+  const btn = wrap.querySelector('.mark-btn');
+  const form = wrap.querySelector('.mark-form');
+  const note = wrap.querySelector('.bought-note');
+
+  if(bought){
+    li.classList.add('bought');
+    btn.hidden = true;
+    form.hidden = true;
+    note.hidden = false;
+    note.innerHTML = `✓ Comprado${boughtBy ? ' por ' + escapeHtmlGift(boughtBy) : ''} <button type="button" class="undo-btn">Desfazer</button>`;
+    note.querySelector('.undo-btn').addEventListener('click', async ()=>{
+      await setDoc(doc(db, 'gifts', id), { bought: false, boughtBy: '' });
+    });
+  } else {
+    li.classList.remove('bought');
+    note.hidden = true;
+    note.innerHTML = '';
+    btn.hidden = false;
+    form.hidden = true;
+  }
+}
+
+onSnapshot(collection(db, 'gifts'), (snapshot) => {
+  const boughtIds = new Set();
+  snapshot.forEach(d => {
+    const data = d.data();
+    if(data.bought){
+      boughtIds.add(d.id);
+      renderBoughtState(d.id, true, data.boughtBy);
+    }
+  });
+  idToLi.forEach((li, id) => {
+    if(!boughtIds.has(id)) renderBoughtState(id, false);
+  });
+});
 </script>
 </body>
 </html>
