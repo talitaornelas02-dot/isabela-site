@@ -208,6 +208,48 @@
     color:var(--violet-blue); font-size:13px;
   }
   footer .fname{font-family:'Give You Glory',cursive; font-size:32px; color:var(--rose-gold); display:block; margin-bottom:10px;}
+
+  /* ===== MOBILE ===== */
+  @media (max-width: 640px){
+    section{padding:60px 16px;}
+    .hero{padding-top:40px;}
+    .hero p.sub{font-size:16px;}
+    .cocoon{gap:16px; padding:24px 16px; margin-top:36px; border-radius:24px;}
+    .cocoon .unit{min-width:64px;}
+    .cocoon .num{font-size:34px;}
+    .cocoon .label{font-size:10px;}
+
+    .meta-title h2{font-size:28px;}
+    .stages{margin-top:36px;}
+    .stages::before{top:18px;}
+    .stage .dot{width:36px; height:36px; font-size:16px; margin-bottom:8px;}
+    .stage .name{font-size:11px;}
+    .stage .desc{display:none;}
+
+    .section-head h2{font-size:28px;}
+    .section-head p{font-size:14px;}
+
+    .accordion summary{padding:16px 18px; font-size:18px; gap:10px;}
+    .accordion summary .ic{font-size:20px;}
+    .accordion summary .count{font-size:10px; padding:3px 9px;}
+    .acc-body{padding:0 18px 18px;}
+    .link-list{grid-template-columns:1fr;}
+
+    .donate-card{padding:24px 20px;}
+    .donate-card .pix-key{font-size:13px; padding:12px;}
+
+    .msg-form{padding:20px;}
+    .msg-form button{align-self:stretch; text-align:center;}
+
+    footer{padding:40px 16px 36px;}
+  }
+
+  @media (max-width: 380px){
+    .cocoon{gap:10px;}
+    .cocoon .unit{min-width:54px;}
+    .cocoon .num{font-size:26px;}
+    .stage .name{font-size:10px;}
+  }
 </style>
 </head>
 <body>
