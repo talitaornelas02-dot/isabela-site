@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Isabela está a caminho 🦋</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Quicksand:wght@400;500;600;700&family=Give+You+Glory&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --lavender-mist:#F6EEFB;
+    --cream:#FFFAF4;
+    --aubergine:#2E1A3D;
+    --orchid:#A855C2;
+    --orchid-deep:#7C3AA0;
+    --rose-gold:#E8A6C1;
+    --violet-blue:#7B5EA7;
+    --line:#E3D3EF;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--lavender-mist);
+    color:var(--aubergine);
+    font-family:'Quicksand',sans-serif;
+    overflow-x:hidden;
+  }
+  h1,h2,h3{font-family:'Cormorant Garamond',serif; margin:0;}
+  .script{font-family:'Give You Glory',cursive;}
+  a{color:inherit;}
+
+  /* floating butterflies */
+  .butterfly-field{position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden;}
+  .bfly{position:absolute; font-size:28px; opacity:.55; animation:flutter linear infinite;}
+  @keyframes flutter{
+    0%{transform:translate(0,110vh) rotate(-10deg);}
+    50%{transform:translate(40px,55vh) rotate(10deg);}
+    100%{transform:translate(-20px,-15vh) rotate(-10deg);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .bfly{animation:none; display:none;}
+  }
+
+  section{position:relative; z-index:1; padding:90px 20px; max-width:920px; margin:0 auto;}
+
+  /* HERO */
+  .hero{
+    min-height:100vh;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center;
+    padding-top:60px;
+  }
+  .hero .eyebrow{
+    letter-spacing:.35em; text-transform:uppercase; font-size:12px; color:var(--orchid-deep); font-weight:600; margin-bottom:18px;
+  }
+  .hero h1{
+    font-size:clamp(48px,9vw,96px);
+    font-weight:600;
+    color:var(--orchid-deep);
+    line-height:1;
+  }
+  .hero .name{font-family:'Give You Glory',cursive; font-size:clamp(56px,11vw,120px); color:var(--rose-gold); display:block; margin-bottom:4px; text-shadow:0 2px 0 rgba(255,255,255,.6);}
+  .hero p.sub{max-width:520px; margin:22px auto 0; font-size:18px; color:var(--violet-blue); font-weight:500;}
+
+  .cocoon{
+    margin-top:56px;
+    background:var(--cream);
+    border-radius:32px;
+    padding:38px 30px;
+    box-shadow:0 20px 60px -20px rgba(124,58,160,.35);
+    display:flex; gap:28px; flex-wrap:wrap; justify-content:center;
+    border:1px solid var(--line);
+  }
+  .cocoon .unit{min-width:90px;}
+  .cocoon .num{font-family:'Cormorant Garamond',serif; font-size:50px; font-weight:600; color:var(--orchid); line-height:1;}
+  .cocoon .label{font-size:12px; letter-spacing:.15em; text-transform:uppercase; color:var(--violet-blue); margin-top:6px;}
+
+  /* METAMORPHOSIS */
+  .meta-title{text-align:center; margin-bottom:8px;}
+  .meta-title h2{font-size:36px; color:var(--orchid-deep);}
+  .meta-title p{color:var(--violet-blue); font-weight:500; margin-top:6px;}
+  .stages{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    margin-top:56px; position:relative;
+  }
+  .stages::before{
+    content:""; position:absolute; top:24px; left:6%; right:6%; height:3px;
+    background:linear-gradient(90deg, var(--rose-gold), var(--orchid), var(--violet-blue));
+    border-radius:3px; opacity:.4;
+  }
+  .stage{flex:1; text-align:center; position:relative;}
+  .stage .dot{
+    width:48px; height:48px; border-radius:50%; margin:0 auto 14px;
+    background:var(--cream); border:3px solid var(--line);
+    display:flex; align-items:center; justify-content:center; font-size:22px;
+    position:relative; z-index:2; transition:.3s;
+  }
+  .stage.active .dot{background:var(--orchid); border-color:var(--orchid); box-shadow:0 8px 24px -8px rgba(168,85,194,.7); transform:scale(1.15);}
+  .stage .name{font-weight:700; font-size:14px;}
+  .stage.active .name{color:var(--orchid-deep);}
+  .stage .desc{font-size:12px; color:var(--violet-blue); margin-top:4px; max-width:120px; margin-left:auto; margin-right:auto;}
+
+  /* SECTION HEADERS */
+  .section-head{text-align:center; margin-bottom:50px;}
+  .section-head .eyebrow{letter-spacing:.3em; text-transform:uppercase; font-size:12px; color:var(--orchid-deep); font-weight:600;}
+  .section-head h2{font-size:38px; color:var(--aubergine); margin-top:6px;}
+  .section-head p{color:var(--violet-blue); font-weight:500; margin-top:10px; max-width:520px; margin-left:auto; margin-right:auto;}
+
+  /* wing divider */
+  .wing-divider{position:relative; height:70px; margin-top:-70px;}
+  .wing-divider svg{width:100%; height:100%; display:block;}
+
+  /* GIFTS */
+  .gift-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:22px;}
+  .gift-card{
+    background:var(--cream); border-radius:24px 24px 24px 4px; padding:26px;
+    border:1px solid var(--line); transition:.25s;
+  }
+  .gift-card:hover{transform:translateY(-6px); box-shadow:0 20px 40px -18px rgba(124,58,160,.35);}
+  .gift-card .ic{font-size:26px;}
+  .gift-card h3{font-size:21px; margin-top:10px; color:var(--orchid-deep);}
+  .gift-card p{font-size:14px; color:#5b4a68; margin-top:8px; line-height:1.5;}
+  .gift-card a.btn{
+    display:inline-block; margin-top:14px; font-size:13px; font-weight:700;
+    color:var(--orchid-deep); border-bottom:2px solid var(--rose-gold); padding-bottom:2px; text-decoration:none;
+  }
+  .edit-note{font-size:11px; color:#9b8aa8; margin-top:8px; font-style:italic;}
+
+  /* GIFT ACCORDIONS */
+  .gift-accordions{display:flex; flex-direction:column; gap:16px;}
+  .accordion{
+    background:var(--cream); border-radius:22px; border:1px solid var(--line); overflow:hidden;
+  }
+  .accordion summary{
+    list-style:none; cursor:pointer; padding:20px 24px; display:flex; align-items:center; gap:14px;
+    font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600; color:var(--orchid-deep);
+  }
+  .accordion summary::-webkit-details-marker{display:none;}
+  .accordion summary .ic{font-size:24px;}
+  .accordion summary .count{
+    margin-left:auto; font-family:'Quicksand',sans-serif; font-size:12px; font-weight:700;
+    background:var(--lavender-mist); color:var(--violet-blue); padding:4px 12px; border-radius:999px;
+  }
+  .accordion summary .chevron{font-size:14px; color:var(--violet-blue); transition:.25s; margin-left:8px;}
+  .accordion[open] summary .chevron{transform:rotate(90deg);}
+  .accordion .acc-body{padding:0 24px 22px;}
+  .link-list{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:9px;}
+  .link-list li a{
+    display:block; background:#fff; border:1px solid var(--line); border-radius:12px; padding:10px 14px;
+    font-size:13px; color:#4a3a55; text-decoration:none; transition:.2s; line-height:1.4;
+  }
+  .link-list li a:hover{border-color:var(--orchid); color:var(--orchid-deep); transform:translateX(3px);}
+  .link-list li.plain span{
+    display:block; background:transparent; border:1px dashed var(--line); border-radius:12px; padding:10px 14px;
+    font-size:13px; color:#9b8aa8; font-style:italic;
+  }
+
+  /* DONATIONS */
+  .donate-wrap{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:22px;}
+  .donate-card{
+    background:linear-gradient(160deg, var(--orchid) 0%, var(--violet-blue) 100%);
+    color:#fff; border-radius:28px; padding:32px; text-align:center;
+  }
+  .donate-card h3{font-size:24px;}
+  .donate-card .pix-key{
+    background:rgba(255,255,255,.15); border:1px dashed rgba(255,255,255,.6);
+    border-radius:14px; padding:14px; margin-top:16px; font-weight:700; letter-spacing:.03em; word-break:break-all;
+    cursor:pointer;
+  }
+  .donate-card p.small{font-size:13px; opacity:.85; margin-top:12px;}
+  .donate-card.alt{background:var(--cream); color:var(--aubergine); border:1px solid var(--line);}
+  .donate-card.alt a.btn{
+    display:inline-block; margin-top:18px; background:var(--orchid-deep); color:#fff; padding:12px 26px;
+    border-radius:999px; text-decoration:none; font-weight:700; font-size:14px;
+  }
+
+  /* MESSAGES */
+  .msg-form{
+    background:var(--cream); border-radius:24px; padding:28px; border:1px solid var(--line);
+    display:flex; flex-direction:column; gap:12px; margin-bottom:40px;
+  }
+  .msg-form input, .msg-form textarea{
+    font-family:'Quicksand',sans-serif; border:1px solid var(--line); border-radius:14px; padding:12px 16px;
+    font-size:15px; background:#fff; color:var(--aubergine); resize:vertical;
+  }
+  .msg-form textarea{min-height:90px;}
+  .msg-form button{
+    align-self:flex-start; background:var(--orchid-deep); color:#fff; border:none; border-radius:999px;
+    padding:12px 28px; font-weight:700; font-size:14px; cursor:pointer; font-family:'Quicksand',sans-serif;
+    transition:.2s;
+  }
+  .msg-form button:hover{background:var(--orchid);}
+  .msg-form button:disabled{opacity:.6; cursor:default;}
+  .msg-list{display:flex; flex-direction:column; gap:16px;}
+  .msg-item{
+    background:#fff; border-radius:18px 18px 18px 4px; padding:18px 20px; border:1px solid var(--line);
+    animation:pop .35s ease;
+  }
+  @keyframes pop{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);}}
+  .msg-item .from{font-weight:700; color:var(--orchid-deep); font-size:14px;}
+  .msg-item p{margin:6px 0 0; font-size:14px; line-height:1.55; color:#4a3a55;}
+  .msg-empty{text-align:center; color:var(--violet-blue); font-size:14px; padding:20px;}
+  .status-note{font-size:12px; color:#9b8aa8;}
+
+  footer{
+    text-align:center; padding:60px 20px 50px; position:relative; z-index:1;
+    color:var(--violet-blue); font-size:13px;
+  }
+  footer .fname{font-family:'Give You Glory',cursive; font-size:32px; color:var(--rose-gold); display:block; margin-bottom:10px;}
+</style>
+</head>
+<body>
+
+<div class="butterfly-field" id="bflyField"></div>
+
+<section class="hero">
+  <div class="eyebrow">Uma nova vida se aproxima</div>
+  <h1><span class="name">Isabela</span>está a caminho</h1>
+  <p class="sub">Cada dia que passa é uma asa que se forma. Estamos contando os dias para conhecer você. 🦋</p>
+
+  <div class="cocoon" id="countdown">
+    <div class="unit"><div class="num" id="cd-days">--</div><div class="label">dias</div></div>
+    <div class="unit"><div class="num" id="cd-hours">--</div><div class="label">horas</div></div>
+    <div class="unit"><div class="num" id="cd-min">--</div><div class="label">min</div></div>
+    <div class="unit"><div class="num" id="cd-sec">--</div><div class="label">seg</div></div>
+  </div>
+</section>
+
+<div class="wing-divider"><svg viewBox="0 0 1440 70" preserveAspectRatio="none"><path d="M0,0 C360,70 1080,70 1440,0 L1440,70 L0,70 Z" fill="var(--cream)"/></svg></div>
+
+<section id="metamorfose" style="background:var(--cream); border-radius:0 0 40px 40px; padding-top:20px;">
+  <div class="meta-title">
+    <h2>Nossa metamorfose</h2>
+    <p id="stageMsg">Acompanhando a transformação, semana a semana.</p>
+  </div>
+  <div class="stages" id="stages"></div>
+</section>
+
+<section id="presentes">
+  <div class="section-head">
+    <div class="eyebrow">Com carinho</div>
+    <h2>Sugestões de presentes</h2>
+    <p>Algumas ideias com carinho — mas o maior presente é a sua presença. 💜</p>
+  </div>
+  <div class="gift-accordions">
+
+    <details class="accordion" open>
+      <summary><span class="ic">👶</span> Roupinhas <span class="count">40 itens</span><span class="chevron">›</span></summary>
+      <div class="acc-body">
+        <ul class="link-list">
+          <li><a href="https://br.shein.com/3pcs-Pack-Baby-Girls-Solid-Color-Leggings-Versatile-All-Match-Tights-For-All-Seasons-p-39122635.html?src_identifier=fc%3DAll%60sc%3DKids%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar08menu01dir01%60jc%3Dreal_2031&src_module=topcat&src_tab_page_id=page_search1786134921280&mallCode=1&pageListType=4&detailBusinessFrom=0-1_39122635%7C0-2" target="_blank" rel="noopener">Kit 3 leggings lisas coringa</a></li>
+          <li><a href="https://br.shein.com/Pink-Floral-Baby-Sandals-For-Newborn-Girls-Comfortable-p-44131732.html?src_identifier=fc%3DAll%60sc%3DKids%60tc%3DShop%20by%20Category%60oc%3DView%20All%60ps%3Dtab00navbar08menu01dir01%60jc%3Dreal_2031&src_module=topcat&src_tab_page_id=page_search1786134921280&mallCode=2&pageListType=4&detailBusinessFrom=0-1_44131732%7C0-2" target="_blank" rel="noopener">Sandália floral rosa para recém-nascida</a></li>
+          <li><a href="https://produto.mercadolivre.com.br/MLB-4574778771-blusa-de-waffle-vermelha-para-bebs-e-vestido-jeans-cereja-_JM?searchVariation=199386573879&attributes=COLOR_SECONDARY_COLOR%3AVmVybWVsaG8%3D%2CSIZE%3AOS0xMk0%3D&sid=bookmarks#polycard_client=bookmark&sid=bookmarks" target="_blank" rel="noopener">Blusa waffle vermelha + vestido jeans cereja</a></li>
+          <li><a href="https://www.mercadolivre.com.br/conjunto-infantil-vestido-e-casaquinho-trico-bebe/up/MLBU4038107122?pdp_filters=item_id%3AMLB6866787050&sid=bookmarks#polycard_client=bookmark&wid=MLB6866787050&sid=bookmarks" target="_blank" rel="noopener">Conjunto vestido e casaquinho de tricô</a></li>
+          <li><a href="https://produto.mercadolivre.com.br/MLB-6824060662-kit-3-macacoes-beb-soft-plush-unissex-ziper-frontal-rn-ao-1-_JM?searchVariation=202505673763&attributes=COLOR_SECONDARY_COLOR%3AQ09FTEhPL1ZBUVVJTkhBL0FSQ09JUklT&sid=bookmarks#polycard_client=bookmark&sid=bookmarks" target="_blank" rel="noopener">Kit 3 macacões soft plush (RN a 1 ano)</a></li>
+          <li><a href="https://br.shein.com/Baby-Girl-2-Pieces-Set-Elegant-Style-Long-Sleeve-Patchwork-Color-Block-Bow-Decor-Shirt-Top-And-Frayed-Waist-Elastic-Waist-Jeans-Pants-Set-Suitable-For-Spring-Autumn-p-92383779.html?mallCode=1" target="_blank" rel="noopener">Conjunto elegante camisa + calça jeans</a></li>
+          <li><a href="https://br.shein.com/2pcs-Young-Girls-Stylish-Cap-Sleeve-Bow-Heart-Ribbed-Top-And-Pants-Set-Spring-Autumn-p-123697649.html?mallCode=1" target="_blank" rel="noopener">Conjunto top com laço + calça</a></li>
+          <li><a href="https://br.shein.com/SHEIN-2pcs-Baby-Girl-Cherry-Print-Long-Sleeve-Top-And-Pants-Pajama-Set-White-And-Pink-Cute-Homewear-For-Autumn-Night-Warm-Pajama-For-Infant-Toddler-p-278702461.html?mallCode=1&skucode=I1cooh9wiito" target="_blank" rel="noopener">Pijama 2 peças estampa de cereja</a></li>
+          <li><a href="https://br.shein.com/Babygirl-Cute-Vacation-Casual-Floral-Pattern-Bow-Decor-Camisole-Elastic-Waist-Pants-Set-p-441564439.html?mallCode=1&skucode=I8mn5w99scodwu" target="_blank" rel="noopener">Conjunto floral regata + calça</a></li>
+          <li><a href="https://br.shein.com/Baby-Girls-Casual-All-Over-Embroidered-Floral-Light-Blue-Suspender-Pants-Summer-p-166008487.html?mallCode=1&skucode=I1amouuxx7j5" target="_blank" rel="noopener">Jardineira floral bordada</a></li>
+          <li><a href="https://br.shein.com/1pc-0-3-Years-Baby-Kids-Beret-Hat-Cute-Boy-Girl-Knitted-Hat-Floral-Solid-Color-Spring-Autumn-Winter-Warm-Children-Hat-p-29138322.html?mallCode=1&skucode=I234tnhxtc54" target="_blank" rel="noopener">Boina de tricô floral</a></li>
+          <li><a href="https://br.shein.com/3pcs-Baby-Outfit-Set-Soft-Comfortable-Minimalist-Ribbed-Floral-Print-Bodysuit-Combination-Suitable-For-Babies-Outdoor-Wear-In-Summer-p-367191413.html?mallCode=1" target="_blank" rel="noopener">Kit 3 peças body ribana floral</a></li>
+          <li><a href="https://br.shein.com/SHEIN-Random-5pcs-Send-1pc-Vintage-Floral-Print-Romper-Girly-Chill-Chill-Y2K-Kawaii-Baby-Girl-Casual-Sleeveless-Jumpsuit-Suitable-For-Spring-Summer-Cute-Summer-Outfits-Summer-Baby-Girl-Items-Summer-Outing-Items-Korean-Style-Easy-Comfort-Stylish-Baby-Girl-Y2K-Kawaii-Party-Everyday-Vacation-Cute-Comfy-Summer-2026-Cottagecore-Weekend-Casual-Family-Outing-Photoshoot-Outfits-Chill-Chill-Baby-Baby-Girl-Graphic-Tops-p-481837060.html?mallCode=1" target="_blank" rel="noopener">Macaquinho floral vintage (kit surpresa 5un)</a></li>
+          <li><a href="https://br.shein.com/Baby-Girl-s-Pink-White-Striped-Summer-Outfit-Heart-Print-Bowknot-Strap-Romper-p-462845370.html?mallCode=1" target="_blank" rel="noopener">Conjunto listrado rosa/branco com coração</a></li>
+          <li><a href="https://br.shein.com/SHEIN-Vintaside-Kids-6pcs-3Set-Newborn-Long-Sleeve-Footed-Jumpsuit-Dusty-Pink-Autumn-Cute-Family-Matching-Heart-Print-Comfortable-Infant-Outfit-For-Casual-Wear-p-303626569.html?mallCode=1" target="_blank" rel="noopener">Kit 3 macacões manga longa rosa</a></li>
+          <li><a href="https://br.shein.com/SHEIN-Vintaside-Kids-3pcs-Girls-Leggings-Pink-White-Beige-Heart-Print-Summer-Autumn-Casual-Cute-Vacation-Pants-Simple-Sweet-Style-Straight-Loose-Fit-Graduation-p-502519050.html?mallCode=1" target="_blank" rel="noopener">Kit 3 leggings estampa de coração</a></li>
+          <li><a href="https://br.shein.com/Newborn-Baby-Zipper-Long-Sleeve-Flannel-Jumpsuit-Autumn-Winter-Pants-2pcs-Set-p-514147933.html?mallCode=1" target="_blank" rel="noopener">Macacão de flanela + calça (inverno)</a></li>
+          <li><a href="https://br.shein.com/Girls-Cute-Ruffle-Trim-Bowknot-Long-Sleeve-Top-And-Pleated-Skirt-2-Piece-Set-Autumn-Winter-p-21322076.html?mallCode=1" target="_blank" rel="noopener">Conjunto blusa com babado + saia plissada</a></li>
+          <li><a href="https://br.shein.com/Young-Girl-Spring-Autumn-Lovely-Bowknot-Decorated-Plaid-Patchwork-Long-Sleeve-Dress-p-26875399.html?mallCode=1" target="_blank" rel="noopener">Vestido xadrez com laço</a></li>
+          <li><a href="https://br.shein.com/Cozy-Pixies-2pcs-Baby-Girl-Contrast-Color-Bow-Decor-Camisole-And-Elastic-Waist-Shorts-Set-Baby-Girl-p-391187828.html?mallCode=1" target="_blank" rel="noopener">Conjunto regata + shorts</a></li>
+          <li><a href="https://br.shein.com/SHEIN-Playful-Pals-2-Pacs-Baby-Girl-Toddler-New-Born-0-3-Years-Old-Spring-Summer-Casual-Daily-Cute-Vacation-Striped-Bow-Pattern-Camisole-Top-Shorts-Set-p-503011065.html?mallCode=1" target="_blank" rel="noopener">Conjunto listrado com laço</a></li>
+          <li><a href="https://br.shein.com/SHEIN-Baby-Girl-Summer-Sweet-Ladylike-Ruffle-Trimmed-Shirt-And-Woven-Suspender-Skirt-Set-p-32627380.html?mallCode=1" target="_blank" rel="noopener">Conjunto blusa com babado + saia suspensório</a></li>
+          <li><a href="https://br.shein.com/Baby-Boy-Girl-Autumn-Winter-Casual-Knit-Romper-p-61504548.html?mallCode=2" target="_blank" rel="noopener">Macacão de tricô unissex</a></li>
+          <li><a href="https://br.shein.com/3pcs-Baby-Girls-Set-Solid-Color-Cap-Sleeve-Romper-Floral-Embroidered-Ruffle-Hem-Pinafore-Dress-Headband-p-30383939.html?mallCode=1" target="_blank" rel="noopener">Kit 3 peças: body + vestido + faixa</a></li>
+          <li><a href="https://br.shein.com/Summer-Baby-Girls-Striped-Bodysuit-With-Big-Bow-Decor-Cap-Sleeve-Bib-Overall-Versatile-Outfits-For-Infants-With-Sun-Hat-Newborn-Summer-Clothing-Gift-p-391271961.html?mallCode=1" target="_blank" rel="noopener">Body listrado com laço + chapéu de sol</a></li>
+          <li><a href="https://br.shein.com/SHEIN-Baby-Girl-All-White-Autumn-Birthday-Elegant-Dress-Sweet-Bow-Contrast-Color-Peter-Pan-Collar-Long-Sleeve-Ruffle-Hem-Casual-Style-Gown-For-Fall-Winter-p-159443388.html?mallCode=1" target="_blank" rel="noopener">Vestido branco elegante de festa</a></li>
+          <li><a href="https://br.shein.com/1-Pair-New-Fashionable-Cute-Toddler-Walking-Shoes-For-1-4-Years-Old-Indoor-Outdoor-All-Season-Wear-Non-Slip-Soft-Sole-Lightweight-Comfortable-Thick-Bottom-Wear-Resistant-Toe-Cap-Low-Top-Walking-Shoes-With-Hook-And-Loop-Closure-Casual-Sports-White-Sneakers-For-Baby-p-101402975.html?mallCode=1" target="_blank" rel="noopener">Tênis para bebê andar</a></li>
+          <li><a href="https://br.shein.com/4-Pack-Baby-Girl-Short-Sleeve-Bodysuits-Pure-Cotton-Animal-Print-Striped-Lion-Comfortable-Baby-Clothes-p-531390348.html?mallCode=2" target="_blank" rel="noopener">Kit 4 bodies estampados de algodão</a></li>
+          <li><a href="https://br.shein.com/Vintaside-Kids-Newborn-Simple-Stylish-Cute-Pink-Long-Sleeve-Hooded-Fleece-Jumpsuit-Loungewear-Autumn-Cute-Kawaii-p-152302094.html?src_identifier=st%3D2%60sc%3DROUPA%20BEBE%20INVERNO%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_real_class1786131309038&mallCode=1&pageListType=4&detailBusinessFrom=0-1_152302094%7C0-2" target="_blank" rel="noopener">Macacão soft com capuz (rosa)</a></li>
+          <li><a href="https://br.shein.com/Baby-Booties-For-Baptism-14-To-19-Comfortable-Soft-And-Elegant-p-102724063.html?mallCode=2" target="_blank" rel="noopener">Sapatinho para batizado</a></li>
+          <li><a href="https://br.shein.com/Summer-Baby-Girl-Elegant-Dress-White-Shirt-Collar-Puff-Sleeve-Black-White-Plaid-Main-Color-Black-Bow-Decor-Fashionable-Chic-Outfit-For-Baby-Girl-Party-Outing-p-430507731.html?mallCode=1" target="_blank" rel="noopener">Vestido xadrez preto e branco com laço</a></li>
+          <li><a href="https://br.shein.com/3-Pairs-Girls-Cotton-Cute-Lady-Style-Short-Socks-Soft-Comfortable-For-Baby-Girls-p-51407223.html?mallCode=1&skucode=I41kq5dt1ogs" target="_blank" rel="noopener">Kit 3 meias curtas de algodão</a></li>
+          <li><a href="https://br.shein.com/Baby-Boys-Gift-Sets-p-29443102.html?mallCode=2" target="_blank" rel="noopener">Kit presente para bebê</a></li>
+          <li><a href="https://br.shein.com/Baby-Girl-3-Piece-Set-In-Cotton-Suedine-2-Bodysuits-And-Pants-Pink-Fox-Theme-Superior-Comfort-p-381116556.html?mallCode=2" target="_blank" rel="noopener">Kit 3 peças tema raposinha</a></li>
+          <li><a href="https://br.shein.com/Elladie-kids-Baby-Girl-Bow-Embroidery-Sweatshirt-And-Pants-Loose-Fit-Set-p-503682070.html?mallCode=1&skucode=I2mprtgrr0y2ty" target="_blank" rel="noopener">Moletom + calça com laço bordado</a></li>
+          <li><a href="https://br.shein.com/Cozy-Pixies-Baby-Girl-Round-Neck-Letter-Cartoon-Print-Long-Sleeve-Sweatshirt-Suitable-For-Autumn-Winter-Indoor-Outdoor-Casual-Skiing-Daily-Wear-Sports-Party-p-505109024.html?mallCode=1&skucode=I4mq438mn6yk29" target="_blank" rel="noopener">Moletom estampado</a></li>
+          <li><a href="https://br.shein.com/10pcs-Pink-Organza-Butterfly-Rose-Hair-Scrunchies-Satin-Bow-Elastic-Ponytail-Hair-Ties-Sweet-Fairy-Style-Daily-Hair-Accessories-For-Girls-p-510993587.html?mallCode=1&skucode=I8mqqekez09b4s" target="_blank" rel="noopener">Kit 10 laços de cabelo borboleta 🦋</a></li>
+          <li><a href="https://br.shein.com/Summer-Baby-Girl-Heart-Pattern-Velvet-Dance-Tights-0-3Y-Soft-Breathable-Skin-Friendly-Infant-Pantyhose-And-Toddler-Leggings-Baby-Socks-p-73221544.html?src_identifier=on%3DCATEGORY_RECOMMEND_COMPONENT%60cn%3DCATEGORY_RECOMMEND_COMPONENT_1%60hz%3D-%60jc%3Dreal_2031%60ps%3D2_1_3&src_module=all&src_tab_page_id=page_home1786131289621&mallCode=1&pageListType=4&detailBusinessFrom=0-1_73221544%7C0-2" target="_blank" rel="noopener">Meia-calça veludo estampa de coração</a></li>
+          <li><a href="https://br.shein.com/Girl-s-Shoes-Soft-Baby-Slippers-p-51600103.html?src_identifier=on%3DCATEGORY_RECOMMEND_COMPONENT%60cn%3DCATEGORY_RECOMMEND_COMPONENT_1%60hz%3D-%60jc%3Dreal_2031%60ps%3D2_1_3&src_module=all&src_tab_page_id=page_home1786131289621&mallCode=2&pageListType=4&detailBusinessFrom=0-2" target="_blank" rel="noopener">Sapatilha macia</a></li>
+          <li><a href="https://br.shein.com/Cozy-Pixies-Newborn-Baby-Girl-Heart-Pattern-Round-Neck-Long-Sleeve-Thickened-Autumn-Jumpsuit-p-40469685.html?src_identifier=st%3D2%60sc%3DROUPA%20BEBE%20INVERNO%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_real_class1786131309038&mallCode=1&pageListType=4&detailBusinessFrom=0-1_40469685%7C0-2" target="_blank" rel="noopener">Macacão grosso estampa de coração</a></li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary><span class="ic">🧺</span> Cueiros, paninhos e fraldas de pano <span class="count">6 itens</span><span class="chevron">›</span></summary>
+      <div class="acc-body">
+        <ul class="link-list">
+          <li><a href="https://produto.mercadolivre.com.br/MLB-4169520543-kit-3-cueiros-flanelado-manta-beb-algodo-80x50cm-enxoval-_JM?searchVariation=187044940310&sid=bookmarks#polycard_client=wishlist&sid=bookmarks" target="_blank" rel="noopener">Kit 3 cueiros flanelados de algodão</a></li>
+          <li><a href="https://produto.mercadolivre.com.br/MLB-4936603710-kit-3-cueiro-flanela-bordada-algodo-de-beb-enxoval-premium-_JM?searchVariation=203374237055&attributes=PATTERN_NAME%3AQm9yYm9sZXRh&sid=bookmarks#polycard_client=wishlist&sid=bookmarks" target="_blank" rel="noopener">Kit 3 cueiros de flanela bordados (borboleta) 🦋</a></li>
+          <li><a href="https://www.mercadolivre.com.br/kit-6-pcs-cueiro-mantinha--paninho-babete-enxoval-bebe-nene/up/MLBU4372236286?pdp_filters=item_id%3AMLB7202960394&sid=bookmarks#polycard_client=wishlist&wid=MLB7202960394&sid=bookmarks" target="_blank" rel="noopener">Kit 6 peças: cueiro + paninho + babador</a></li>
+          <li><a href="https://br.shein.com/Set-Of-3-Personalized-Bandana-Bibs-With-Baby-Boy-Girl-Initial-Plain-Embroidered-Pink-p-434044942.html?mallCode=2&skucode=I1mnf5krvkdaf5" target="_blank" rel="noopener">Kit 3 babadores personalizáveis</a></li>
+          <li><a href="https://br.shein.com/Buba-Premium-Baby-Animal-Blanket-Hypoallergenic-And-Soft-Plush-Toy-Comfort-Protection-p-138939065.html?mallCode=2&skucode=I86njhvdwr3r" target="_blank" rel="noopener">Manta Buba com bichinho de pelúcia</a></li>
+          <li><a href="https://br.shein.com/Cloth-Diaper-Kit-With-10-Units-60x60cm-100-Cotton-Minasrey-Baby-Soft-Absorbent-And-Multi-Use-Bib-Towel-Etc-review-520961066.html?mall_code=2&goods_spu=a250117625315&local_site_query_flag=&sku=sa25011762531595080&store_code=7621457073&isLowestPriceProductOfBuyBox=NaN&cat_id=3277&sku_code=I6mrayw2ikaci5&isAppointMall=&isUserSelectedMallCode=0&isTrusted=true&_vts=1786131047818" target="_blank" rel="noopener">Kit 10 fraldas de pano 100% algodão</a></li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary><span class="ic">🛏️</span> Quarto <span class="count">7 itens</span><span class="chevron">›</span></summary>
+      <div class="acc-body">
+        <ul class="link-list">
+          <li><a href="https://www.mercadolivre.com.br/lixeira-anti-odor-baby-mel-higiene-bebe-descarte-lixo-magico/up/MLBU3486341310?pdp_filters=item_id%3AMLB4245592091&sid=bookmarks#polycard_client=bookmark&wid=MLB4245592091&sid=bookmarks" target="_blank" rel="noopener">Lixeira anti-odor para fraldas</a></li>
+          <li><a href="https://br.shein.com/Waterproof-Cover-For-Fully-Adjustable-Crib-Mattress-American-Standard-p-54140382.html?mallCode=2&skucode=I726l1bqzgki" target="_blank" rel="noopener">Capa impermeável para colchão de berço</a></li>
+          <li><a href="https://br.shein.com/American-Crib-Kit-Girl-Bita-Rose-Blush-11-Pieces-Cotton-p-53802192.html?mallCode=2&skucode=I025qapf692q" target="_blank" rel="noopener">Kit berço americano rosa (11 peças)</a></li>
+          <li><a href="https://br.shein.com/Portable-Bed-And-Dresser-Changing-Pad-Soft-Waterproof-Baby-Changing-Mat-With-Washable-Cover-p-546298665.html?src_identifier=st%3D2%60sc%3DTrocador+De+Comoda+roxo%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_search1786133943910&mallCode=2&pageListType=4&detailBusinessFrom=0-1_546298814%7C0-2&imgRatio=1-1&main_attr=27_1000123" target="_blank" rel="noopener">Trocador portátil impermeável (cama/cômoda)</a></li>
+          <li><a href="https://br.shein.com/BABY-MARATHON-Double-Sided-Changing-Pad-For-Dresser-70x45-Foam-Cover-Plastic-Coated-Boy-Girl-Neutral-p-386538242.html?src_identifier=st%3D2%60sc%3DTrocador+De+Comoda+roxo%60sr%3D0%60ps%3D1&src_module=search&src_tab_page_id=page_search1786133943910&mallCode=2&pageListType=4&detailBusinessFrom=0-1_386538201%7C0-2&imgRatio=1-1&main_attr=27_1000107" target="_blank" rel="noopener">Trocador de cômoda dupla face (70x45)</a></li>
+          <li><a href="https://www.mercadolivre.com.br/lencol-para-berco-americano-bebe-elastico-avulso-kit-c2-un/up/MLBU743081749#polycard_client=search-desktop&float_highlight=last_units&be_origin=backend&overlay_label=not_apply&search_layout=grid&position=6&type=product&tracking_id=6b403bfe-5402-49c3-9151-6c9ff43c540c&wid=MLB1974880152&sid=search" target="_blank" rel="noopener">Kit 2 lençóis com elástico p/ berço americano</a></li>
+          <li><a href="https://produto.mercadolivre.com.br/MLB-5870509928-lencol-berco-americano-avulso-100-algodo-300-fios-elastico-_JM?searchVariation=186621027486#polycard_client=search-desktop&searchVariation=186621027486&float_highlight=last_units&be_origin=backend&overlay_label=not_apply&search_layout=grid&position=8&type=item&tracking_id=6b403bfe-5402-49c3-9151-6c9ff43c540c&sid=search" target="_blank" rel="noopener">Lençol berço americano 100% algodão (300 fios)</a></li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary><span class="ic">🛁</span> Banho <span class="count">9 itens</span><span class="chevron">›</span></summary>
+      <div class="acc-body">
+        <ul class="link-list">
+          <li><a href="https://www.mercadolivre.com.br/kit-c7-itens-essenciais-para-o-cuidado-com-bebe--buba-care/up/MLBU3915431675?pdp_filters=item_id%3AMLB6666791396&sid=bookmarks#polycard_client=bookmark&wid=MLB6666791396&sid=bookmarks" target="_blank" rel="noopener">Kit 7 itens essenciais de cuidado (Buba)</a></li>
+          <li><a href="https://br.shein.com/Natura-Delicate-Mom-And-Baby-Gift-Set-4-Items-p-519182455.html?mallCode=2&skucode=I7mr5imcdkh950" target="_blank" rel="noopener">Kit presente mãe e bebê Natura</a></li>
+          <li><a href="https://produto.mercadolivre.com.br/MLB-5687116608-toalha-beb-banho-soft-capuz-3-camadas-fralda-algodo-_JM?searchVariation=205150128527&attributes=COLOR_SECONDARY_COLOR%3AQmFpbGFyaW5hIDI%3D&sid=bookmarks#polycard_client=bookmark&sid=bookmarks" target="_blank" rel="noopener">Toalha de banho com capuz, 3 camadas</a></li>
+          <li><a href="https://www.mercadolivre.com.br/rede-seguranca-protecao-banheira-bebe-universal-apoio-banho/up/MLBU3010002837?pdp_filters=item_id%3AMLB3975052917&sid=bookmarks#polycard_client=wishlist&wid=MLB3975052917&sid=bookmarks" target="_blank" rel="noopener">Rede de segurança para banheira</a></li>
+          <li><a href="https://produto.mercadolivre.com.br/MLB-6179862632-rede-banheira-beb-buba-proteco-almofada-0m-recem-nascido-_JM?searchVariation=195929801665&attributes=COLOR_SECONDARY_COLOR%3AQ2luemE%3D&sid=bookmarks#polycard_client=wishlist&sid=bookmarks" target="_blank" rel="noopener">Rede/almofada para banheira (Buba)</a></li>
+          <li><a href="https://www.mercadolivre.com.br/toalha-de-banho-bebe-infantil-com-capuz-grande-macia-forrada/up/MLBU4052195361?pdp_filters=item_id%3AMLB6917535388&sid=bookmarks#polycard_client=wishlist&wid=MLB6917535388&sid=bookmarks" target="_blank" rel="noopener">Toalha de banho grande com capuz</a></li>
+          <li><a href="https://produto.mercadolivre.com.br/MLB-3996238919-suporte-universal-dobravel-compacto-para-banheira-de-beb-branco-_JM?sid=bookmarks#polycard_client=bookmark&wid=MLB3996238919&sid=bookmarks" target="_blank" rel="noopener">Suporte dobrável para banheira</a></li>
+          <li><a href="https://br.shein.com/Buba-Giraffe-And-Bear-Baby-Bath-Thermometer-Pink-And-Blue-Infant-Child-p-294860399.html?mallCode=2&skucode=I595ptk7tdos" target="_blank" rel="noopener">Termômetro de banho (girafa/urso)</a></li>
+          <li><a href="https://br.shein.com/Kit-2-Personalized-Bath-Towel-Initial-Baby-s-Name-With-Hood-Boy-Girl-Hypoallergenic-Embroidered-100-Soft-Cotton-Lilac-Lavender-Flower-p-88243962.html?mallCode=2&skucode=I58zq5nlixhh" target="_blank" rel="noopener">Kit 2 toalhas personalizáveis (lilás/lavanda)</a></li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary><span class="ic">🚼</span> Higiene <span class="count">8 itens</span><span class="chevron">›</span></summary>
+      <div class="acc-body">
+        <ul class="link-list">
+          <li><a href="https://br.shein.com/Baby-Care-Hygiene-Kit-Porcelain-Butterfly-Girl-Children-s-Bedroom-Modern-Dresser-Bath-K012-p-85361726.html?mallCode=2&skucode=I88xw0dfzp46&imgRatio=1-1" target="_blank" rel="noopener">Kit higiene de porcelana tema borboleta 🦋</a></li>
+          <li><a href="https://www.mercadolivre.com.br/bepantol-baby-kit-576-lencos-umedecidos-12-pacotes/p/MLB68213080#polycard_client=search-desktop&be_origin=backend&overlay_label=not_apply&search_layout=grid&position=6&type=product&tracking_id=9a5ee9aa-f28a-4028-85fd-f06eec768948&wid=MLB6823469618&sid=search" target="_blank" rel="noopener">Kit 576 lenços umedecidos Bepantol Baby (12 pacotes)</a></li>
+          <li><a href="https://www.mercadolivre.com.br/creme-pomada-de-assadura-lanolina-e-vit-b5-100g-bepantol/p/MLB18397502#polycard_client=search-desktop&be_origin=backend&overlay_label=not_apply&search_layout=grid&position=7&type=product&tracking_id=9a5ee9aa-f28a-4028-85fd-f06eec768948&wid=MLB4701795785&sid=search" target="_blank" rel="noopener">Pomada de assadura Bepantol (lanolina + vit. B5, 100g)</a></li>
+          <li><a href="https://www.mercadolivre.com.br/pomada-nistatina-neo-quimica-bebe-60g/p/MLB41993504#polycard_client=search-desktop&be_origin=backend&overlay_label=not_apply&search_layout=grid&position=5&type=product&tracking_id=9a5ee9aa-f28a-4028-85fd-f06eec768948&wid=MLB6079816158&sid=search" target="_blank" rel="noopener">Pomada Nistatina para assadura (tratamento, 60g)</a></li>
+          <li><a href="https://www.mercadolivre.com.br/creme-cetrilan-pomada-assadura-infantil-pele-delicada-bebe-120g-theraskinw/p/MLB19694274#polycard_client=search-desktop&be_origin=backend&overlay_label=not_apply&search_layout=grid&position=20&type=product&tracking_id=9a5ee9aa-f28a-4028-85fd-f06eec768948&wid=MLB3281859243&sid=search" target="_blank" rel="noopener">Pomada Cetrilan para assadura, pele delicada (120g)</a></li>
+          <li><a href="https://www.mercadolivre.com.br/kit-bepantol-baby-lencos-umedecidos-48-unid-pomada-assadura/up/MLBU2875894305#polycard_client=search-desktop&float_highlight=last_unit&be_origin=backend&overlay_label=not_apply&search_layout=grid&position=22&type=product&tracking_id=9a5ee9aa-f28a-4028-85fd-f06eec768948&wid=MLB5205420302&sid=search" target="_blank" rel="noopener">Kit Bepantol Baby: lenços umedecidos + pomada</a></li>
+          <li><a href="https://www.mercadolivre.com.br/kit-enxoval-bebe-joao-e-maria-sabonete-shampoo-pomada-lenco/up/MLBU3066175631#polycard_client=search-desktop&be_origin=backend&overlay_label=not_apply&search_layout=grid&position=23&type=product&tracking_id=9a5ee9aa-f28a-4028-85fd-f06eec768948&wid=MLB5318194490&sid=search" target="_blank" rel="noopener">Kit enxoval João e Maria: sabonete + shampoo + pomada + lenço</a></li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary><span class="ic">🍼</span> Alimentação <span class="count">7 itens</span><span class="chevron">›</span></summary>
+      <div class="acc-body">
+        <ul class="link-list">
+          <li><a href="https://www.mercadolivre.com.br/kit-25-sacos-para-armazenar-e-congelar-leite-materno-buba/p/MLB24690640?pdp_filters=item_id%3AMLB4534494498&sid=bookmarks#polycard_client=wishlist&wid=MLB4534494498&sid=bookmarks" target="_blank" rel="noopener">Kit 25 sacos para congelar leite materno</a></li>
+          <li><a href="https://produto.mercadolivre.com.br/MLB-5477343308-kit-08-frascos-p-leite-materno-graduaco-200ml-elefante-_JM?searchVariation=184166935930&attributes=COLOR_SECONDARY_COLOR%3ARXN0YW1wYSAtIGRlc2VuaG8gdmVyZGU%3D&sid=bookmarks#polycard_client=wishlist&sid=bookmarks" target="_blank" rel="noopener">Kit 8 frascos para leite materno (200ml)</a></li>
+          <li><a href="https://www.mercadolivre.com.br/kit-mamadeira-bebe-avent-anticolica-125ml-260ml-330ml-cor-rosa/p/MLB25539132?pdp_filters=item_id%3AMLB4092474813&sid=bookmarks#polycard_client=wishlist&wid=MLB4092474813&sid=bookmarks" target="_blank" rel="noopener">Kit mamadeiras Avent anticólica (rosa)</a></li>
+          <li><a href="https://www.mercadolivre.com.br/aquecedor-esterilizador-de-mamadeira-papinha/p/MLB45976810?pdp_filters=item_id%3AMLB6694519446&sid=bookmarks#polycard_client=wishlist&wid=MLB6694519446&sid=bookmarks" target="_blank" rel="noopener">Aquecedor/esterilizador de mamadeira e papinha</a></li>
+          <li><a href="https://www.mercadolivre.com.br/kit-portatil-para-limpeza-de-mamadeira-5-em-1-escova-buba/p/MLB42111901?pdp_filters=item_id%3AMLB5385129002&sid=bookmarks#polycard_client=wishlist&wid=MLB5385129002&sid=bookmarks" target="_blank" rel="noopener">Kit portátil de limpeza de mamadeira 5 em 1</a></li>
+          <li><a href="https://www.mercadolivre.com.br/babuu-bomba-tira-leite-materno-para-amamentacao/p/MLB2096333170?pdp_filters=item_id%3AMLB4713390989&sid=bookmarks#polycard_client=wishlist&wid=MLB4713390989&sid=bookmarks" target="_blank" rel="noopener">Bomba tira-leite materno</a></li>
+          <li><a href="https://br.shein.com/Baby-Powdered-Milk-Container-Kit-2-Containers-2-Silicone-Tipped-Spoons-For-Weaning-p-296359005.html?mallCode=2&skucode=I09fkkkbmnoq" target="_blank" rel="noopener">Kit potes para leite em pó + colheres</a></li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary><span class="ic">🎒</span> Passeio <span class="count">1 item</span><span class="chevron">›</span></summary>
+      <div class="acc-body">
+        <ul class="link-list">
+          <li><a href="https://br.shein.com/1pc-Baby-Stroller-Pad-Soft-Plush-Dotted-Cushion-Reversible-Cotton-Stroller-Car-Seat-Liner-p-164706727.html?mallCode=1&skucode=I0b2v3afdwkh" target="_blank" rel="noopener">Forrinho acolchoado para carrinho de bebê</a></li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary><span class="ic">🧷</span> Fraldas <span class="count">13 itens</span><span class="chevron">›</span></summary>
+      <div class="acc-body">
+        <ul class="link-list">
+          <li><a href="https://www.mercadolivre.com.br/fraldas-descartaveis-premium-care-recem-nascido-com-36-unidades-tamanho-rn-pampers/p/MLB17335905#polycard_client=search-desktop&be_origin=backend&overlay_label=not_apply&search_layout=grid&position=3&type=product&tracking_id=bd2f87e4-9510-4487-84f5-43690909d2f4&wid=MLB4510994381&sid=search" target="_blank" rel="noopener">Fraldas RN — Pampers Premium Care (36 un)</a></li>
+          <li><a href="https://www.mercadolivre.com.br/fraldas-recem-nascido-premium-care-tamanho-rn-com-20-unidades-pampers/p/MLB17336068#polycard_client=search-desktop&be_origin=backend&overlay_label=not_apply&search_layout=grid&position=2&type=product&tracking_id=bd2f87e4-9510-4487-84f5-43690909d2f4&wid=MLB4585115773&sid=search" target="_blank" rel="noopener">Fraldas RN — Pampers Premium Care (20 un)</a></li>
+          <li><a href="https://www.mercadolivre.com.br/fralda-pampers-confort-sec-p-50-unidades/p/MLB17335903#polycard_client=search-desktop&be_origin=backend&overlay_label=not_apply&search_layout=grid&position=7&type=product&tracking_id=a79a1ccf-9171-42ad-a56f-f236c2bcff94&wid=MLB1806456379&sid=search" target="_blank" rel="noopener">Fraldas P — Pampers Confort Sec (50 un)</a></li>
+          <li><a href="https://www.mercadolivre.com.br/fralda-pampers-supersec-tamanho-m-30-unidades/p/MLB17336320#polycard_client=search-desktop&be_origin=backend&overlay_label=not_apply&search_layout=grid&position=5&type=product&tracking_id=c90ae728-ec6b-4a81-add6-ae0ab159ab32&wid=MLB4593030141&sid=search" target="_blank" rel="noopener">Fraldas M — Pampers Supersec (30 un)</a></li>
+          <li><a href="https://www.mercadolivre.com.br/huggies-fralda-descartavel-maxima-protecao-m-40-un/p/MLB17336203#polycard_client=search-desktop&be_origin=backend&overlay_label=not_apply&search_layout=grid&position=9&type=product&tracking_id=c90ae728-ec6b-4a81-add6-ae0ab159ab32&wid=MLB4148870708&sid=search" target="_blank" rel="noopener">Fraldas M — Huggies Máxima Proteção (40 un)</a></li>
+          <li><a href="https://www.mercadolivre.com.br/huggies-fralda-descartavel-maxima-protecao-g-66-un/p/MLB20133824#polycard_client=search-desktop&be_origin=backend&overlay_label=not_apply&search_layout=grid&position=6&type=product&tracking_id=be753058-a522-44cf-ade4-ecdbb8400247&wid=MLB3310315513&sid=search" target="_blank" rel="noopener">Fraldas G — Huggies Máxima Proteção (66 un)</a></li>
+          <li><a href="https://www.mercadolivre.com.br/fralda-pom-pom-protek-protecao-de-mae-g-68-unidades/p/MLB19516361#polycard_client=search-desktop&be_origin=backend&overlay_label=not_apply&search_layout=grid&position=11&type=product&tracking_id=be753058-a522-44cf-ade4-ecdbb8400247&wid=MLB3338977450&sid=search" target="_blank" rel="noopener">Fraldas G — Pom Pom Protek (68 un)</a></li>
+        </ul>
+        <p class="edit-note">Alguns links de fraldas com rastreamento de anúncio muito longo foram removidos por segurança — se precisar deles de volta, me avise.</p>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary><span class="ic">🎁</span> Outros <span class="count">5 itens</span><span class="chevron">›</span></summary>
+      <div class="acc-body">
+        <ul class="link-list">
+          <li><a href="https://www.mercadolivre.com.br/abafador-infantil-anti-ruido-bebe/up/MLBU3994794252?pdp_filters=item_id%3AMLB6823296270&sid=bookmarks#polycard_client=wishlist&wid=MLB6823296270&sid=bookmarks" target="_blank" rel="noopener">Abafador de ruído infantil</a></li>
+          <li><a href="https://www.mercadolivre.com.br/tapete-infantil-emborrachado-sensorial-dobravel-dupla-face-educativo-alfabeto-i-love-baby/p/MLB35712629?pdp_filters=item_id%3AMLB3669351607&sid=bookmarks#polycard_client=bookmark&wid=MLB3669351607&sid=bookmarks" target="_blank" rel="noopener">Tapete sensorial dobrável (alfabeto)</a></li>
+          <li><a href="https://www.mercadolivre.com.br/kit-5-saquinhos-maternidade-com-tag-bordada-de-identificacao-cor-nuvem-branca-desenho-do-tecido-plastico/p/MLB53308919?pdp_filters=item_id%3AMLB5535900574&sid=bookmarks#polycard_client=bookmark&wid=MLB5535900574&sid=bookmarks" target="_blank" rel="noopener">Kit 5 saquinhos de maternidade com tag</a></li>
+          <li><a href="https://www.mercadolivre.com.br/pato-lalafanfan-pelucia-30cm-antialergico-fofo-acessorios/up/MLBU2952899221?pdp_filters=item_id%3AMLB5254082152&sid=bookmarks#polycard_client=bookmark&wid=MLB5254082152&sid=bookmarks" target="_blank" rel="noopener">Pato Lalafanfan de pelúcia 30cm</a></li>
+          <li><a href="https://www.mercadolivre.com.br/almofada-de-atividade-para-tummy-time-bebe-esquilo-maxi-baby/up/MLBU3800705246?pdp_filters=item_id%3AMLB6256577856&sid=bookmarks#polycard_client=bookmark&wid=MLB6256577856&sid=bookmarks" target="_blank" rel="noopener">Almofada de atividades tummy time (esquilo)</a></li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary><span class="ic">🎀</span> Acessórios de passeio <span class="count">2 itens</span><span class="chevron">›</span></summary>
+      <div class="acc-body">
+        <ul class="link-list">
+          <li><a href="https://br.shein.com/1pc-Octopus-Stroller-Fan-USB-Rechargeable-Portable-Silent-Mini-Handheld-Foldable-Fan-With-LED-Night-Light-3-Speed-Adjustable-Fan-For-Travel-Camping-p-37202500.html?mallCode=1&skucode=I4r2yd84dvm3" target="_blank" rel="noopener">Ventilador para carrinho (polvo)</a></li>
+          <li><a href="https://br.shein.com/Spiral-Mobile-Centipede-Stroller-Baby-Car-Seat-And-Crib-WORM-p-61200053.html?mallCode=2&skucode=I97b1vfg8cck" target="_blank" rel="noopener">Móbile espiral para carrinho/berço</a></li>
+        </ul>
+      </div>
+    </details>
+
+  </div>
+</section>
+
+<section id="doacoes">
+  <div class="section-head">
+    <div class="eyebrow">Com carinho</div>
+    <h2>Doações</h2>
+    <p>Se preferir contribuir de outra forma, aqui vão algumas opções.</p>
+  </div>
+  <div class="donate-wrap" style="max-width:360px; margin:0 auto;">
+    <div class="donate-card">
+      <h3>💜 Pix</h3>
+      <p class="small">Chave Pix para quem quiser contribuir com o enxoval da Isabela. Toque para copiar.</p>
+      <div class="pix-key" id="pixKey" title="Toque para copiar">7256013e-2121-4d41-855b-e265012fd74a</div>
+      <p class="small" id="pixCopyStatus"></p>
+    </div>
+  </div>
+</section>
+
+<div class="wing-divider" style="transform:rotate(180deg); margin-top:0;"><svg viewBox="0 0 1440 70" preserveAspectRatio="none"><path d="M0,0 C360,70 1080,70 1440,0 L1440,70 L0,70 Z" fill="var(--cream)"/></svg></div>
+
+<section id="mensagens" style="background:var(--cream); border-radius:40px 40px 0 0; padding-top:70px;">
+  <div class="section-head">
+    <div class="eyebrow">Mural</div>
+    <h2>Mensagens para Isabela</h2>
+    <p>Deixe uma mensagem de carinho, um conselho ou um desejo para quando ela crescer. 🦋</p>
+  </div>
+
+  <div class="msg-form">
+    <input type="text" id="msgFrom" placeholder="Seu nome" maxlength="60">
+    <textarea id="msgText" placeholder="Escreva sua mensagem para a Isabela..." maxlength="600"></textarea>
+    <button id="msgSubmit">Enviar mensagem 💌</button>
+    <div class="status-note" id="msgStatus">As mensagens ficam salvas neste navegador/aparelho.</div>
+  </div>
+
+  <div class="msg-list" id="msgList">
+    <div class="msg-empty">Carregando mensagens...</div>
+  </div>
+</section>
+
+<footer>
+  <span class="fname">Isabela</span>
+  Feito com muito amor, enquanto esperamos por você.
+</footer>
+
+<script>
+// ---------- Floating butterflies ----------
+(function(){
+  const field = document.getElementById('bflyField');
+  const colors = ['#A855C2','#E8A6C1','#7B5EA7'];
+  const count = window.innerWidth < 640 ? 6 : 12;
+  for(let i=0;i<count;i++){
+    const b = document.createElement('div');
+    b.className='bfly';
+    b.textContent='🦋';
+    b.style.left = (Math.random()*100)+'vw';
+    b.style.color = colors[i % colors.length];
+    b.style.fontSize = (18+Math.random()*22)+'px';
+    b.style.animationDuration = (14+Math.random()*14)+'s';
+    b.style.animationDelay = (-Math.random()*20)+'s';
+    field.appendChild(b);
+  }
+})();
+
+// ---------- Countdown ----------
+const DUE_DATE = new Date('2026-12-07T00:00:00-03:00');
+function updateCountdown(){
+  const now = new Date();
+  let diff = DUE_DATE - now;
+  if(diff < 0) diff = 0;
+  const days = Math.floor(diff/(1000*60*60*24));
+  const hours = Math.floor((diff/(1000*60*60))%24);
+  const mins = Math.floor((diff/(1000*60))%60);
+  const secs = Math.floor((diff/1000)%60);
+  document.getElementById('cd-days').textContent = days;
+  document.getElementById('cd-hours').textContent = String(hours).padStart(2,'0');
+  document.getElementById('cd-min').textContent = String(mins).padStart(2,'0');
+  document.getElementById('cd-sec').textContent = String(secs).padStart(2,'0');
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+// ---------- Metamorphosis stages ----------
+const STAGES = [
+  {key:'ovo', icon:'🥚', name:'Ovo', desc:'1º trimestre', weeks:[0,13]},
+  {key:'lagarta', icon:'🐛', name:'Lagarta', desc:'2º trimestre', weeks:[14,27]},
+  {key:'casulo', icon:'🍃', name:'Casulo', desc:'3º trimestre', weeks:[28,40]},
+  {key:'borboleta', icon:'🦋', name:'Borboleta', desc:'Chegou!', weeks:[41,999]},
+];
+function computeWeeksPregnant(){
+  const totalDays = 280; // ~40 semanas
+  const start = new Date(DUE_DATE.getTime() - totalDays*24*60*60*1000);
+  const now = new Date();
+  let days = Math.floor((now-start)/(1000*60*60*24));
+  if(days<0) days=0;
+  return Math.min(Math.floor(days/7), 42);
+}
+function renderStages(){
+  const weeks = computeWeeksPregnant();
+  const wrap = document.getElementById('stages');
+  wrap.innerHTML='';
+  let activeIdx = STAGES.findIndex(s => weeks>=s.weeks[0] && weeks<=s.weeks[1]);
+  if(activeIdx===-1) activeIdx = STAGES.length-1;
+  STAGES.forEach((s,i)=>{
+    const div = document.createElement('div');
+    div.className = 'stage' + (i===activeIdx ? ' active':'');
+    div.innerHTML = `<div class="dot">${s.icon}</div><div class="name">${s.name}</div><div class="desc">${s.desc}</div>`;
+    wrap.appendChild(div);
+  });
+  const msgs = {
+    ovo:'As primeiras semanas de formação — o começo de tudo.',
+    lagarta:'Crescendo dia após dia, ganhando força.',
+    casulo:'Quase pronta para se revelar ao mundo.',
+    borboleta:'Isabela finalmente chegou! 🦋'
+  };
+  document.getElementById('stageMsg').textContent = msgs[STAGES[activeIdx].key] + ` (semana ${weeks})`;
+}
+renderStages();
+
+// ---------- Pix copy ----------
+(function(){
+  const pixKey = document.getElementById('pixKey');
+  const status = document.getElementById('pixCopyStatus');
+  pixKey.addEventListener('click', async ()=>{
+    try{
+      await navigator.clipboard.writeText(pixKey.textContent.trim());
+      status.textContent = 'Chave copiada! 💜';
+    }catch(e){
+      status.textContent = 'Não foi possível copiar automaticamente, copie manualmente.';
+    }
+    setTimeout(()=>{ status.textContent=''; }, 3000);
+  });
+})();
+
+// ---------- Messages wall (persisted locally in this browser) ----------
+const STORAGE_KEY = 'isabela_messages';
+const msgList = document.getElementById('msgList');
+const msgFrom = document.getElementById('msgFrom');
+const msgText = document.getElementById('msgText');
+const msgSubmit = document.getElementById('msgSubmit');
+const msgStatus = document.getElementById('msgStatus');
+
+function loadMessagesFromStorage(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  }catch(e){
+    return [];
+  }
+}
+function saveMessagesToStorage(items){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+}
+function escapeHtml(str){
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+function renderMessages(){
+  const items = loadMessagesFromStorage();
+  if(items.length===0){
+    msgList.innerHTML = '<div class="msg-empty">Seja a primeira pessoa a deixar uma mensagem para a Isabela 💜</div>';
+    return;
+  }
+  msgList.innerHTML = items.slice().reverse().map(m => `
+    <div class="msg-item">
+      <div class="from">${escapeHtml(m.from)}</div>
+      <p>${escapeHtml(m.text)}</p>
+    </div>
+  `).join('');
+}
+
+msgSubmit.addEventListener('click', ()=>{
+  const from = msgFrom.value.trim();
+  const text = msgText.value.trim();
+  if(!from || !text){
+    msgStatus.textContent = 'Preencha seu nome e a mensagem antes de enviar.';
+    return;
+  }
+  const items = loadMessagesFromStorage();
+  items.push({from, text, ts:Date.now()});
+  saveMessagesToStorage(items);
+  msgFrom.value=''; msgText.value='';
+  msgStatus.textContent = 'Mensagem enviada! As mensagens ficam salvas neste navegador/aparelho.';
+  renderMessages();
+});
+
+renderMessages();
+</script>
+</body>
+</html>
