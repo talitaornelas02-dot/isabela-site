@@ -981,8 +981,7 @@ guessSubmit.addEventListener('click', async ()=>{
   guessSubmit.disabled = true;
   guessStatus.textContent = 'Enviando...';
   try{
-    const payload = { nome, data, peso, tamanho, ts: serverTimestamp() };
-    if(hora) payload.hora = hora;
+    const payload = { nome, data, hora, peso, tamanho, ts: serverTimestamp() };
     await addDoc(collection(db, 'palpites'), payload);
     guessName.value=''; guessDate.value=''; guessTime.value=''; guessWeight.value=''; guessSize.value='';
     guessStatus.textContent = 'Palpite enviado! Visível para todos que acessarem o site.';
