@@ -25,7 +25,26 @@
     color:var(--aubergine);
     font-family:'Quicksand',sans-serif;
     overflow-x:hidden;
+    padding-top:46px;
   }
+  section{scroll-margin-top:56px;}
+
+  /* TOP NAV */
+  .topnav{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    display:flex; gap:4px; align-items:center; justify-content:flex-start;
+    overflow-x:auto; white-space:nowrap;
+    background:rgba(255,250,244,.88); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+    padding:9px 14px;
+    scrollbar-width:none;
+  }
+  .topnav::-webkit-scrollbar{display:none;}
+  .topnav a{
+    font-size:12px; font-weight:700; color:var(--violet-blue); text-decoration:none;
+    padding:6px 12px; border-radius:999px; letter-spacing:.02em; transition:.2s; flex-shrink:0;
+  }
+  .topnav a:hover{background:var(--lavender-mist); color:var(--orchid-deep);}
   h1,h2,h3{font-family:'Cormorant Garamond',serif; margin:0;}
   .script{font-family:'Give You Glory',cursive;}
   a{color:inherit;}
@@ -246,6 +265,37 @@
   .msg-empty{text-align:center; color:var(--violet-blue); font-size:14px; padding:20px;}
   .status-note{font-size:12px; color:#9b8aa8;}
 
+  /* PALPITES */
+  .guess-form{
+    background:var(--cream); border-radius:24px; padding:28px; border:1px solid var(--line);
+    display:flex; flex-direction:column; gap:14px; margin-bottom:40px;
+  }
+  .guess-form input[type="text"]{
+    font-family:'Quicksand',sans-serif; border:1px solid var(--line); border-radius:14px; padding:12px 16px;
+    font-size:15px; background:#fff; color:var(--aubergine);
+  }
+  .guess-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px;}
+  .guess-grid label{display:flex; flex-direction:column; gap:6px; font-size:12px; font-weight:700; color:var(--violet-blue);}
+  .guess-grid input{
+    font-family:'Quicksand',sans-serif; border:1px solid var(--line); border-radius:12px; padding:10px 12px;
+    font-size:14px; background:#fff; color:var(--aubergine);
+  }
+  .guess-form button{
+    align-self:flex-start; background:var(--orchid-deep); color:#fff; border:none; border-radius:999px;
+    padding:12px 28px; font-weight:700; font-size:14px; cursor:pointer; font-family:'Quicksand',sans-serif;
+    transition:.2s;
+  }
+  .guess-form button:hover{background:var(--orchid);}
+  .guess-form button:disabled{opacity:.6; cursor:default;}
+  .guess-list{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px;}
+  .guess-item{
+    background:#fff; border-radius:18px 18px 18px 4px; padding:16px 18px; border:1px solid var(--line);
+    animation:pop .35s ease;
+  }
+  .guess-item .from{font-weight:700; color:var(--orchid-deep); font-size:14px;}
+  .guess-item .details{margin-top:6px; font-size:13px; color:#4a3a55; line-height:1.6;}
+  .guess-empty{text-align:center; color:var(--violet-blue); font-size:14px; padding:20px; grid-column:1/-1;}
+
   footer{
     text-align:center; padding:60px 20px 50px; position:relative; z-index:1;
     color:var(--violet-blue); font-size:13px;
@@ -286,6 +336,11 @@
     .msg-form{padding:20px;}
     .msg-form button{align-self:stretch; text-align:center;}
 
+    .guess-form{padding:20px;}
+    .guess-form button{align-self:stretch; text-align:center;}
+    .topnav{padding:8px 10px;}
+    .topnav a{font-size:11px; padding:5px 10px;}
+
     footer{padding:40px 16px 36px;}
   }
 
@@ -299,9 +354,19 @@
 </head>
 <body>
 
+<nav class="topnav">
+  <a href="#top">Início</a>
+  <a href="#metamorfose">Metamorfose</a>
+  <a href="#fotos">Momentos</a>
+  <a href="#presentes">Presentes</a>
+  <a href="#palpites">Palpites</a>
+  <a href="#doacoes">Doações</a>
+  <a href="#mensagens">Mensagens</a>
+</nav>
+
 <div class="butterfly-field" id="bflyField"></div>
 
-<section class="hero">
+<section class="hero" id="top">
   <div class="eyebrow">Uma nova vida se aproxima</div>
   <h1><span class="name">Isabela</span>está a caminho</h1>
   <p class="sub">Cada dia que passa é uma asa que se forma. Estamos contando os dias para conhecer você. 🦋</p>
@@ -517,6 +582,38 @@
       </div>
     </details>
 
+  </div>
+</section>
+
+<section id="palpites">
+  <div class="section-head">
+    <div class="eyebrow">Chá de palpites</div>
+    <h2>Qual é o seu palpite?</h2>
+    <p>Adivinhe a data, o horário, o peso e o tamanho da Isabela ao nascer. Quem chegar mais perto ganha um agrado! 🍼</p>
+  </div>
+
+  <div class="guess-form">
+    <input type="text" id="guessName" placeholder="Seu nome" maxlength="60">
+    <div class="guess-grid">
+      <label>Data prevista
+        <input type="date" id="guessDate">
+      </label>
+      <label>Horário
+        <input type="time" id="guessTime">
+      </label>
+      <label>Peso (kg)
+        <input type="number" id="guessWeight" step="0.01" min="0.5" max="7" placeholder="ex: 3.20">
+      </label>
+      <label>Tamanho (cm)
+        <input type="number" id="guessSize" step="0.5" min="30" max="60" placeholder="ex: 49">
+      </label>
+    </div>
+    <button id="guessSubmit">Enviar palpite 🔮</button>
+    <div class="status-note" id="guessStatus">Os palpites ficam visíveis para todos que acessarem este site.</div>
+  </div>
+
+  <div class="guess-list" id="guessList">
+    <div class="guess-empty">Seja a primeira pessoa a dar um palpite 🔮</div>
   </div>
 </section>
 
@@ -825,6 +922,74 @@ msgSubmit.addEventListener('click', async ()=>{
     msgStatus.textContent = 'Não foi possível enviar agora, tente novamente.';
   }
   msgSubmit.disabled = false;
+});
+
+// ---------- Palpites (birth guesses, shared via Firestore) ----------
+const guessName = document.getElementById('guessName');
+const guessDate = document.getElementById('guessDate');
+const guessTime = document.getElementById('guessTime');
+const guessWeight = document.getElementById('guessWeight');
+const guessSize = document.getElementById('guessSize');
+const guessSubmit = document.getElementById('guessSubmit');
+const guessStatus = document.getElementById('guessStatus');
+const guessList = document.getElementById('guessList');
+
+function formatGuessDate(iso){
+  if(!iso) return '';
+  const [y,m,d] = iso.split('-');
+  return `${d}/${m}/${y}`;
+}
+
+function renderGuessList(docs){
+  if(docs.length===0){
+    guessList.innerHTML = '<div class="guess-empty">Seja a primeira pessoa a dar um palpite 🔮</div>';
+    return;
+  }
+  guessList.innerHTML = docs.map(g => `
+    <div class="guess-item">
+      <div class="from">${escapeHtmlGift(g.nome)}</div>
+      <div class="details">
+        📅 ${formatGuessDate(g.data)}${g.hora ? ' às ' + escapeHtmlGift(g.hora) : ''}<br>
+        ⚖️ ${g.peso} kg &nbsp;·&nbsp; 📏 ${g.tamanho} cm
+      </div>
+    </div>
+  `).join('');
+}
+
+const guessQuery = query(collection(db, 'palpites'), orderBy('ts', 'desc'), limit(200));
+onSnapshot(guessQuery, (snapshot) => {
+  const docs = snapshot.docs.map(d => d.data());
+  renderGuessList(docs);
+});
+
+guessSubmit.addEventListener('click', async ()=>{
+  const nome = guessName.value.trim().slice(0,60);
+  const data = guessDate.value;
+  const hora = guessTime.value;
+  const peso = parseFloat(guessWeight.value);
+  const tamanho = parseFloat(guessSize.value);
+
+  if(!nome || !data || isNaN(peso) || isNaN(tamanho)){
+    guessStatus.textContent = 'Preencha nome, data, peso e tamanho antes de enviar.';
+    return;
+  }
+  if(peso <= 0 || peso > 7 || tamanho <= 0 || tamanho > 60){
+    guessStatus.textContent = 'Confira os valores de peso e tamanho.';
+    return;
+  }
+
+  guessSubmit.disabled = true;
+  guessStatus.textContent = 'Enviando...';
+  try{
+    const payload = { nome, data, peso, tamanho, ts: serverTimestamp() };
+    if(hora) payload.hora = hora;
+    await addDoc(collection(db, 'palpites'), payload);
+    guessName.value=''; guessDate.value=''; guessTime.value=''; guessWeight.value=''; guessSize.value='';
+    guessStatus.textContent = 'Palpite enviado! Visível para todos que acessarem o site.';
+  }catch(e){
+    guessStatus.textContent = 'Não foi possível enviar agora, tente novamente.';
+  }
+  guessSubmit.disabled = false;
 });
 </script>
 </body>
