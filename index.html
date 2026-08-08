@@ -549,7 +549,7 @@
     <input type="text" id="msgFrom" placeholder="Seu nome" maxlength="60">
     <textarea id="msgText" placeholder="Escreva sua mensagem para a Isabela..." maxlength="600"></textarea>
     <button id="msgSubmit">Enviar mensagem 💌</button>
-    <div class="status-note" id="msgStatus">As mensagens ficam salvas neste navegador/aparelho.</div>
+    <div class="status-note" id="msgStatus">As mensagens ficam visíveis para todos que acessarem este site.</div>
   </div>
 
   <div class="msg-list" id="msgList">
@@ -651,67 +651,14 @@ renderStages();
   });
 })();
 
-// ---------- Messages wall (persisted locally in this browser) ----------
-const STORAGE_KEY = 'isabela_messages';
-const msgList = document.getElementById('msgList');
-const msgFrom = document.getElementById('msgFrom');
-const msgText = document.getElementById('msgText');
-const msgSubmit = document.getElementById('msgSubmit');
-const msgStatus = document.getElementById('msgStatus');
-
-function loadMessagesFromStorage(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
-  }catch(e){
-    return [];
-  }
-}
-function saveMessagesToStorage(items){
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-}
-function escapeHtml(str){
-  const d = document.createElement('div');
-  d.textContent = str;
-  return d.innerHTML;
-}
-function renderMessages(){
-  const items = loadMessagesFromStorage();
-  if(items.length===0){
-    msgList.innerHTML = '<div class="msg-empty">Seja a primeira pessoa a deixar uma mensagem para a Isabela 💜</div>';
-    return;
-  }
-  msgList.innerHTML = items.slice().reverse().map(m => `
-    <div class="msg-item">
-      <div class="from">${escapeHtml(m.from)}</div>
-      <p>${escapeHtml(m.text)}</p>
-    </div>
-  `).join('');
-}
-
-msgSubmit.addEventListener('click', ()=>{
-  const from = msgFrom.value.trim();
-  const text = msgText.value.trim();
-  if(!from || !text){
-    msgStatus.textContent = 'Preencha seu nome e a mensagem antes de enviar.';
-    return;
-  }
-  const items = loadMessagesFromStorage();
-  items.push({from, text, ts:Date.now()});
-  saveMessagesToStorage(items);
-  msgFrom.value=''; msgText.value='';
-  msgStatus.textContent = 'Mensagem enviada! As mensagens ficam salvas neste navegador/aparelho.';
-  renderMessages();
-});
-
-renderMessages();
 </script>
 
 <script type="module">
 // ---------- Gift list: "mark as bought" (shared via Firestore) ----------
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
-  getFirestore, doc, setDoc, collection, onSnapshot
+  getFirestore, doc, setDoc, collection, onSnapshot,
+  addDoc, query, orderBy, limit, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -833,6 +780,51 @@ onSnapshot(collection(db, 'gifts'), (snapshot) => {
   idToLi.forEach((li, id) => {
     if(!boughtIds.has(id)) renderBoughtState(id, false);
   });
+});
+
+// ---------- Messages wall (shared via Firestore) ----------
+const msgList = document.getElementById('msgList');
+const msgFrom = document.getElementById('msgFrom');
+const msgText = document.getElementById('msgText');
+const msgSubmit = document.getElementById('msgSubmit');
+const msgStatus = document.getElementById('msgStatus');
+
+function renderMessagesList(docs){
+  if(docs.length===0){
+    msgList.innerHTML = '<div class="msg-empty">Seja a primeira pessoa a deixar uma mensagem para a Isabela 💜</div>';
+    return;
+  }
+  msgList.innerHTML = docs.map(m => `
+    <div class="msg-item">
+      <div class="from">${escapeHtmlGift(m.from)}</div>
+      <p>${escapeHtmlGift(m.text)}</p>
+    </div>
+  `).join('');
+}
+
+const msgQuery = query(collection(db, 'messages'), orderBy('ts', 'desc'), limit(200));
+onSnapshot(msgQuery, (snapshot) => {
+  const docs = snapshot.docs.map(d => d.data());
+  renderMessagesList(docs);
+});
+
+msgSubmit.addEventListener('click', async ()=>{
+  const from = msgFrom.value.trim().slice(0,60);
+  const text = msgText.value.trim().slice(0,600);
+  if(!from || !text){
+    msgStatus.textContent = 'Preencha seu nome e a mensagem antes de enviar.';
+    return;
+  }
+  msgSubmit.disabled = true;
+  msgStatus.textContent = 'Enviando...';
+  try{
+    await addDoc(collection(db, 'messages'), { from, text, ts: serverTimestamp() });
+    msgFrom.value=''; msgText.value='';
+    msgStatus.textContent = 'Mensagem enviada! Visível para todos que acessarem o site.';
+  }catch(e){
+    msgStatus.textContent = 'Não foi possível enviar agora, tente novamente.';
+  }
+  msgSubmit.disabled = false;
 });
 </script>
 </body>
