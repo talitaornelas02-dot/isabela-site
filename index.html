@@ -111,6 +111,16 @@
   .wing-divider{position:relative; height:70px; margin-top:-70px;}
   .wing-divider svg{width:100%; height:100%; display:block;}
 
+  /* PHOTO GALLERY */
+  .photo-gallery{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:18px;}
+  .photo-gallery a{display:block; border-radius:24px; overflow:hidden;}
+  .photo-gallery img{
+    width:100%; height:340px; object-fit:cover; display:block;
+    border:1px solid var(--line); box-shadow:0 14px 30px -18px rgba(124,58,160,.35);
+    transition:.3s;
+  }
+  .photo-gallery img:hover{transform:scale(1.03); box-shadow:0 20px 40px -18px rgba(124,58,160,.45);}
+
   /* GIFTS */
   .gift-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:22px;}
   .gift-card{
@@ -262,6 +272,8 @@
     .section-head h2{font-size:28px;}
     .section-head p{font-size:14px;}
 
+    .photo-gallery img{height:240px;}
+
     .accordion summary{padding:16px 18px; font-size:18px; gap:10px;}
     .accordion summary .ic{font-size:20px;}
     .accordion summary .count{font-size:10px; padding:3px 9px;}
@@ -310,6 +322,19 @@
     <p id="stageMsg">Acompanhando a transformação, semana a semana.</p>
   </div>
   <div class="stages" id="stages"></div>
+</section>
+
+<section id="fotos">
+  <div class="section-head">
+    <div class="eyebrow">Momentos</div>
+    <h2>Nossos momentos</h2>
+    <p>Um pouquinho da nossa espera por você. 💜</p>
+  </div>
+  <div class="photo-gallery">
+    <a href="fotos/cha-revelacao.jpeg" target="_blank" rel="noopener"><img src="fotos/cha-revelacao.jpeg" alt="Talita e o parceiro no chá revelação" loading="lazy"></a>
+    <a href="fotos/ultrassom.jpeg" target="_blank" rel="noopener"><img src="fotos/ultrassom.jpeg" alt="Ultrassom da Isabela" loading="lazy"></a>
+    <a href="fotos/coracao-barriga.jpeg" target="_blank" rel="noopener"><img src="fotos/coracao-barriga.jpeg" alt="Mãos em formato de coração na barriga" loading="lazy"></a>
+  </div>
 </section>
 
 <section id="presentes">
