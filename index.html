@@ -110,6 +110,42 @@
   .cocoon .num{font-family:'Cormorant Garamond',serif; font-size:50px; font-weight:600; color:var(--orchid); line-height:1;}
   .cocoon .label{font-size:12px; letter-spacing:.15em; text-transform:uppercase; color:var(--violet-blue); margin-top:6px;}
 
+  /* CHÁ DE BEBÊ */
+  .event-card{
+    display:flex; flex-wrap:wrap; gap:22px; justify-content:center;
+    background:var(--cream); border-radius:28px; padding:32px; border:1px solid var(--line);
+    margin-bottom:36px; box-shadow:0 20px 60px -20px rgba(124,58,160,.25);
+  }
+  .event-detail{display:flex; align-items:center; gap:14px; flex:1; min-width:220px;}
+  .event-detail .ic{font-size:28px;}
+  .event-label{font-size:11px; letter-spacing:.15em; text-transform:uppercase; color:var(--violet-blue); font-weight:700;}
+  .event-value{font-family:'Cormorant Garamond',serif; font-size:19px; color:var(--orchid-deep); font-weight:600; margin-top:2px;}
+
+  .rsvp-form{
+    background:var(--cream); border-radius:24px; padding:28px; border:1px solid var(--line);
+    display:flex; flex-direction:column; gap:12px; margin:0 auto 40px; max-width:420px;
+  }
+  .rsvp-form input[type="text"], .rsvp-form input[type="number"]{
+    font-family:'Quicksand',sans-serif; border:1px solid var(--line); border-radius:14px; padding:12px 16px;
+    font-size:15px; background:#fff; color:var(--aubergine);
+  }
+  .rsvp-guests-label{display:flex; flex-direction:column; gap:6px; font-size:12px; font-weight:700; color:var(--violet-blue);}
+  .rsvp-form button{
+    align-self:flex-start; background:var(--orchid-deep); color:#fff; border:none; border-radius:999px;
+    padding:12px 28px; font-weight:700; font-size:14px; cursor:pointer; font-family:'Quicksand',sans-serif;
+    transition:.2s;
+  }
+  .rsvp-form button:hover{background:var(--orchid);}
+  .rsvp-form button:disabled{opacity:.6; cursor:default;}
+  .rsvp-list{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; max-width:720px; margin:0 auto;}
+  .rsvp-item{
+    background:#fff; border-radius:18px 18px 18px 4px; padding:16px 18px; border:1px solid var(--line);
+    animation:pop .35s ease; text-align:left;
+  }
+  .rsvp-item .from{font-weight:700; color:var(--orchid-deep); font-size:14px;}
+  .rsvp-item .details{margin-top:4px; font-size:13px; color:#4a3a55;}
+  .rsvp-empty{text-align:center; color:var(--violet-blue); font-size:14px; padding:20px; grid-column:1/-1;}
+
   /* METAMORPHOSIS */
   .meta-title{text-align:center; margin-bottom:8px;}
   .meta-title h2{font-size:36px; color:var(--orchid-deep);}
@@ -327,6 +363,10 @@
     .cocoon .num{font-size:34px;}
     .cocoon .label{font-size:10px;}
 
+    .event-card{padding:24px 20px; gap:16px;}
+    .rsvp-form{padding:20px;}
+    .rsvp-form button{align-self:stretch; text-align:center;}
+
     .meta-title h2{font-size:28px;}
     .stages{margin-top:36px;}
     .stages::before{top:18px;}
@@ -374,6 +414,7 @@
   </button>
   <div class="topnav-links" id="topnavLinks">
     <a href="#top">Início</a>
+    <a href="#cha-bebe">Chá de Bebê</a>
     <a href="#metamorfose">Metamorfose</a>
     <a href="#fotos">Momentos</a>
     <a href="#presentes">Presentes</a>
@@ -395,6 +436,51 @@
     <div class="unit"><div class="num" id="cd-hours">--</div><div class="label">horas</div></div>
     <div class="unit"><div class="num" id="cd-min">--</div><div class="label">min</div></div>
     <div class="unit"><div class="num" id="cd-sec">--</div><div class="label">seg</div></div>
+  </div>
+</section>
+
+<section id="cha-bebe">
+  <div class="section-head">
+    <div class="eyebrow">Você está convidada(o)</div>
+    <h2>Chá de Bebê</h2>
+    <p>Vamos celebrar a chegada da Isabela juntos! Confirme sua presença. 🦋💜</p>
+  </div>
+
+  <div class="event-card">
+    <div class="event-detail">
+      <span class="ic">📅</span>
+      <div>
+        <div class="event-label">Data</div>
+        <div class="event-value">A definir — setembro de 2026</div>
+      </div>
+    </div>
+    <div class="event-detail">
+      <span class="ic">🕐</span>
+      <div>
+        <div class="event-label">Horário</div>
+        <div class="event-value">13h</div>
+      </div>
+    </div>
+    <div class="event-detail">
+      <span class="ic">📍</span>
+      <div>
+        <div class="event-label">Local</div>
+        <div class="event-value">Salão de festas — Cond. San Marino II</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rsvp-form">
+    <input type="text" id="rsvpName" placeholder="Seu nome" maxlength="60">
+    <label class="rsvp-guests-label">Quantidade de acompanhantes
+      <input type="number" id="rsvpGuests" min="0" max="10" step="1" placeholder="0">
+    </label>
+    <button id="rsvpSubmit">Confirmar presença 💌</button>
+    <div class="status-note" id="rsvpStatus">As confirmações ficam visíveis para todos que acessarem este site.</div>
+  </div>
+
+  <div class="rsvp-list" id="rsvpList">
+    <div class="rsvp-empty">Seja a primeira pessoa a confirmar presença 🦋</div>
   </div>
 </section>
 
@@ -1018,6 +1104,58 @@ guessSubmit.addEventListener('click', async ()=>{
     guessStatus.textContent = 'Não foi possível enviar agora, tente novamente.';
   }
   guessSubmit.disabled = false;
+});
+
+// ---------- RSVP Chá de Bebê (shared via Firestore) ----------
+const rsvpName = document.getElementById('rsvpName');
+const rsvpGuests = document.getElementById('rsvpGuests');
+const rsvpSubmit = document.getElementById('rsvpSubmit');
+const rsvpStatus = document.getElementById('rsvpStatus');
+const rsvpList = document.getElementById('rsvpList');
+
+function renderRsvpList(docs){
+  if(docs.length===0){
+    rsvpList.innerHTML = '<div class="rsvp-empty">Seja a primeira pessoa a confirmar presença 🦋</div>';
+    return;
+  }
+  rsvpList.innerHTML = docs.map(r => `
+    <div class="rsvp-item">
+      <div class="from">${escapeHtmlGift(r.nome)}</div>
+      <div class="details">${r.acompanhantes > 0 ? '+ ' + r.acompanhantes + ' acompanhante' + (r.acompanhantes>1?'s':'') : 'Vai sozinha(o)'}</div>
+    </div>
+  `).join('');
+}
+
+const rsvpQuery = query(collection(db, 'confirmacoes'), orderBy('ts', 'desc'), limit(300));
+onSnapshot(rsvpQuery, (snapshot) => {
+  const docs = snapshot.docs.map(d => d.data());
+  renderRsvpList(docs);
+});
+
+rsvpSubmit.addEventListener('click', async ()=>{
+  const nome = rsvpName.value.trim().slice(0,60);
+  let acompanhantes = parseInt(rsvpGuests.value, 10);
+  if(isNaN(acompanhantes) || acompanhantes < 0) acompanhantes = 0;
+
+  if(!nome){
+    rsvpStatus.textContent = 'Preencha seu nome antes de enviar.';
+    return;
+  }
+  if(acompanhantes > 10){
+    rsvpStatus.textContent = 'Número de acompanhantes muito alto, confira o valor.';
+    return;
+  }
+
+  rsvpSubmit.disabled = true;
+  rsvpStatus.textContent = 'Enviando...';
+  try{
+    await addDoc(collection(db, 'confirmacoes'), { nome, acompanhantes, ts: serverTimestamp() });
+    rsvpName.value=''; rsvpGuests.value='';
+    rsvpStatus.textContent = 'Presença confirmada! Visível para todos que acessarem o site.';
+  }catch(e){
+    rsvpStatus.textContent = 'Não foi possível enviar agora, tente novamente.';
+  }
+  rsvpSubmit.disabled = false;
 });
 </script>
 </body>
