@@ -943,6 +943,21 @@ function hashId(str){
 
 const idToLi = new Map();
 
+function getMyBoughtIds(){
+  try{ return new Set(JSON.parse(localStorage.getItem('myBoughtGifts') || '[]')); }
+  catch(e){ return new Set(); }
+}
+function addMyBoughtId(id){
+  const s = getMyBoughtIds();
+  s.add(id);
+  localStorage.setItem('myBoughtGifts', JSON.stringify([...s]));
+}
+function removeMyBoughtId(id){
+  const s = getMyBoughtIds();
+  s.delete(id);
+  localStorage.setItem('myBoughtGifts', JSON.stringify([...s]));
+}
+
 document.querySelectorAll('.link-list li').forEach(li => {
   const a = li.querySelector('a[href]');
   if(!a) return;
@@ -987,11 +1002,13 @@ document.querySelectorAll('.link-list li').forEach(li => {
     confirmBtn.disabled = true;
     errorEl.textContent = '';
     try{
+      addMyBoughtId(id);
       await setDoc(doc(db, 'gifts', id), {
         bought: true,
         boughtBy: nameInput.value.trim().slice(0,40)
       });
     }catch(e){
+      removeMyBoughtId(id);
       errorEl.textContent = 'Não foi possível marcar agora, tente novamente.';
     }
     confirmBtn.disabled = false;
@@ -1011,10 +1028,14 @@ function renderBoughtState(id, bought, boughtBy){
     btn.hidden = true;
     form.hidden = true;
     note.hidden = false;
-    note.innerHTML = `✓ Comprado${boughtBy ? ' por ' + escapeHtmlGift(boughtBy) : ''} <button type="button" class="undo-btn">Desfazer</button>`;
-    note.querySelector('.undo-btn').addEventListener('click', async ()=>{
-      await setDoc(doc(db, 'gifts', id), { bought: false, boughtBy: '' });
-    });
+    const canUndo = getMyBoughtIds().has(id);
+    note.innerHTML = `✓ Comprado${boughtBy ? ' por ' + escapeHtmlGift(boughtBy) : ''}${canUndo ? ' <button type="button" class="undo-btn">Desfazer</button>' : ''}`;
+    if(canUndo){
+      note.querySelector('.undo-btn').addEventListener('click', async ()=>{
+        await setDoc(doc(db, 'gifts', id), { bought: false, boughtBy: '' });
+        removeMyBoughtId(id);
+      });
+    }
   } else {
     li.classList.remove('bought');
     note.hidden = true;
