@@ -120,6 +120,8 @@
   .event-detail .ic{font-size:28px;}
   .event-label{font-size:11px; letter-spacing:.15em; text-transform:uppercase; color:var(--violet-blue); font-weight:700;}
   .event-value{font-family:'Cormorant Garamond',serif; font-size:19px; color:var(--orchid-deep); font-weight:600; margin-top:2px;}
+  .event-address{font-size:13px; color:#5b4a68; margin-top:4px;}
+  .event-map-link{display:inline-block; font-size:12px; font-weight:700; color:var(--orchid-deep); border-bottom:2px solid var(--rose-gold); margin-top:6px; text-decoration:none;}
 
   .rsvp-form{
     background:var(--cream); border-radius:24px; padding:28px; border:1px solid var(--line);
@@ -137,14 +139,6 @@
   }
   .rsvp-form button:hover{background:var(--orchid);}
   .rsvp-form button:disabled{opacity:.6; cursor:default;}
-  .rsvp-list{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; max-width:720px; margin:0 auto;}
-  .rsvp-item{
-    background:#fff; border-radius:18px 18px 18px 4px; padding:16px 18px; border:1px solid var(--line);
-    animation:pop .35s ease; text-align:left;
-  }
-  .rsvp-item .from{font-weight:700; color:var(--orchid-deep); font-size:14px;}
-  .rsvp-item .details{margin-top:4px; font-size:13px; color:#4a3a55;}
-  .rsvp-empty{text-align:center; color:var(--violet-blue); font-size:14px; padding:20px; grid-column:1/-1;}
 
   /* METAMORPHOSIS */
   .meta-title{text-align:center; margin-bottom:8px;}
@@ -465,7 +459,9 @@
       <span class="ic">📍</span>
       <div>
         <div class="event-label">Local</div>
-        <div class="event-value">Salão de festas — Cond. San Marino II</div>
+        <div class="event-value">Salão de festas — Cond. Residencial San Marino II</div>
+        <div class="event-address">Rua Pau do Café, 917 — Casa Grande, Diadema/SP</div>
+        <a class="event-map-link" href="https://www.google.com/maps/search/?api=1&query=Rua+Pau+do+Caf%C3%A9%2C+917%2C+Casa+Grande%2C+Diadema" target="_blank" rel="noopener">Ver no mapa</a>
       </div>
     </div>
   </div>
@@ -476,11 +472,7 @@
       <input type="number" id="rsvpGuests" min="0" max="10" step="1" placeholder="0">
     </label>
     <button id="rsvpSubmit">Confirmar presença 💌</button>
-    <div class="status-note" id="rsvpStatus">As confirmações ficam visíveis para todos que acessarem este site.</div>
-  </div>
-
-  <div class="rsvp-list" id="rsvpList">
-    <div class="rsvp-empty">Seja a primeira pessoa a confirmar presença 🦋</div>
+    <div class="status-note" id="rsvpStatus">Sua confirmação é enviada só para os organizadores.</div>
   </div>
 </section>
 
@@ -1106,31 +1098,11 @@ guessSubmit.addEventListener('click', async ()=>{
   guessSubmit.disabled = false;
 });
 
-// ---------- RSVP Chá de Bebê (shared via Firestore) ----------
+// ---------- RSVP Chá de Bebê (envio privado via Firestore) ----------
 const rsvpName = document.getElementById('rsvpName');
 const rsvpGuests = document.getElementById('rsvpGuests');
 const rsvpSubmit = document.getElementById('rsvpSubmit');
 const rsvpStatus = document.getElementById('rsvpStatus');
-const rsvpList = document.getElementById('rsvpList');
-
-function renderRsvpList(docs){
-  if(docs.length===0){
-    rsvpList.innerHTML = '<div class="rsvp-empty">Seja a primeira pessoa a confirmar presença 🦋</div>';
-    return;
-  }
-  rsvpList.innerHTML = docs.map(r => `
-    <div class="rsvp-item">
-      <div class="from">${escapeHtmlGift(r.nome)}</div>
-      <div class="details">${r.acompanhantes > 0 ? '+ ' + r.acompanhantes + ' acompanhante' + (r.acompanhantes>1?'s':'') : 'Vai sozinha(o)'}</div>
-    </div>
-  `).join('');
-}
-
-const rsvpQuery = query(collection(db, 'confirmacoes'), orderBy('ts', 'desc'), limit(300));
-onSnapshot(rsvpQuery, (snapshot) => {
-  const docs = snapshot.docs.map(d => d.data());
-  renderRsvpList(docs);
-});
 
 rsvpSubmit.addEventListener('click', async ()=>{
   const nome = rsvpName.value.trim().slice(0,60);
@@ -1151,7 +1123,7 @@ rsvpSubmit.addEventListener('click', async ()=>{
   try{
     await addDoc(collection(db, 'confirmacoes'), { nome, acompanhantes, ts: serverTimestamp() });
     rsvpName.value=''; rsvpGuests.value='';
-    rsvpStatus.textContent = 'Presença confirmada! Visível para todos que acessarem o site.';
+    rsvpStatus.textContent = 'Presença confirmada! Obrigada 💜';
   }catch(e){
     rsvpStatus.textContent = 'Não foi possível enviar agora, tente novamente.';
   }

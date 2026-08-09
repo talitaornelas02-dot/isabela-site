@@ -31,7 +31,7 @@ service cloud.firestore {
     }
 
     match /confirmacoes/{confirmacaoId} {
-      allow read: if true;
+      allow read: if false;
       allow create: if request.resource.data.keys().hasOnly(['nome', 'acompanhantes', 'ts'])
                    && request.resource.data.nome is string && request.resource.data.nome.size() <= 60
                    && request.resource.data.acompanhantes is number && request.resource.data.acompanhantes >= 0 && request.resource.data.acompanhantes <= 10
